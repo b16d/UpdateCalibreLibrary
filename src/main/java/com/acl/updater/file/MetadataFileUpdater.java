@@ -97,7 +97,7 @@ public class MetadataFileUpdater implements FileUpdater {
         if (elementFind == null) {
             return;
         }
-        LOGGER.info("Text find : {]", elementFind.getTextContent());
+        LOGGER.info("Text find : {}", elementFind.getTextContent());
         //Convertion HTML
         String newText = Utils.html2text(elementFind.getTextContent());
         LOGGER.info("New Text, {}", newText);

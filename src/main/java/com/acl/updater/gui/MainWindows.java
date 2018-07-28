@@ -18,6 +18,7 @@ import java.util.Properties;
 public class MainWindows {
 
     private static final Logger LOGGER = LogManager.getLogger(MetadataFileUpdater.class);
+    private static final String FILEPATH_TO_PROPERTIES = ".." + File.separator + "config" + File.separator + "gui.properties";
 
     private JFrame mainFrame;
 
@@ -124,7 +125,8 @@ public class MainWindows {
     private void loadProperties() {
         properties = new Properties();
         try  {
-            properties.load(new FileInputStream("gui.properties"));
+            properties.load(new FileInputStream(FILEPATH_TO_PROPERTIES));
+
             filePath.setText(properties.getProperty("filePath"));
         } catch (IOException e) {
             LOGGER.error("Property file not found, ", e);
@@ -132,7 +134,7 @@ public class MainWindows {
     }
 
     private void updatePropertiesFile() {
-        try (OutputStream output = new FileOutputStream("gui.properties")) {
+        try (OutputStream output = new FileOutputStream(FILEPATH_TO_PROPERTIES)) {
 
             // save properties to project root folder
             properties.store(output, null);
