@@ -16,23 +16,32 @@ public class UpdateAllFiles {
 
     private BackupDirectory zipFolder;
 
-    public UpdateAllFiles(String filePath) {
-        init(filePath);
+    private boolean isBbackup = false;
+
+    public UpdateAllFiles(String filePath, boolean isBackup) {
+        init(filePath, isBackup);
     }
 
-    private void init(String filePath) {
+    private void init(String filePath, boolean backup) {
         zipFolder = new ZipFolder(filePath);
         databaseUpdater = new MetadataDatabaseUpdater(filePath);
         fileUpdater = new MetadataFileUpdater(filePath);
+        isBbackup = backup;
     }
 
     public void update() {
-       // zipFolder.backupDirectory();
+        if (isBbackup) {
+            zipFolder.backupDirectory();
+        }
         databaseUpdater.updateData();
         fileUpdater.updateDirectory();
     }
     public static void main(String[] args) {
-        UpdateAllFiles main = new UpdateAllFiles("C:\\Users\\alban\\Documents\\Bibliothèque calibre");
+        UpdateAllFiles main = new UpdateAllFiles("C:\\Users\\alban\\Documents\\Bibliothèque calibre", false);
         main.update();
+    }
+
+    public void setZipFolder(BackupDirectory zipFolder) {
+        this.zipFolder = zipFolder;
     }
 }

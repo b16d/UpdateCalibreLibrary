@@ -30,7 +30,9 @@ public class MainWindows {
 
     private JFileChooser fileChooser;
 
-    private JLabel filePath;
+    private JTextField filePath;
+
+    private JCheckBox backupCheckBox;
 
     private Properties properties;
 
@@ -51,11 +53,12 @@ public class MainWindows {
         panel.setLayout(gridLayout);
         panel.add(fileChooserButton);
         panel.add(filePath);
+        panel.add(backupCheckBox);
         panel.add(executeUpdate);
         panel.add(exitButton);
 
         mainFrame.add(panel);
-        mainFrame.setSize(400, 250);
+        mainFrame.setSize(400, 270);
         mainFrame.setResizable(false);
         mainFrame.setVisible(true);
 
@@ -71,13 +74,15 @@ public class MainWindows {
         fileChooserButton = new JButton("Choose Directory");
         executeUpdate = new JButton("Start Conversion");
         exitButton = new JButton("Exit");
+        backupCheckBox = new JCheckBox("Backup Directory");
 
-        filePath = new JLabel("");
+        filePath = new JTextField("");
 
         fileChooserButton.setVisible(true);
         executeUpdate.setVisible(true);
         filePath.setVisible(true);
         exitButton.setVisible(true);
+        backupCheckBox.setVisible(true);
 
         addActionListener();
     }
@@ -86,7 +91,7 @@ public class MainWindows {
         executeUpdate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UpdateAllFiles updateAllFiles = new UpdateAllFiles(filePath.getText());
+                UpdateAllFiles updateAllFiles = new UpdateAllFiles(filePath.getText(), backupCheckBox.isSelected());
                 updateAllFiles.update();
 
                 JOptionPane.showInternalMessageDialog(mainFrame.getContentPane(), "Conversion finished",
