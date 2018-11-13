@@ -27,7 +27,7 @@ public class UpdateAllFiles {
     }
 
     public void update() {
-        zipFolder.backupDirectory();
+       // zipFolder.backupDirectory();
         databaseUpdater.updateData();
         fileUpdater.updateDirectory();
     }
