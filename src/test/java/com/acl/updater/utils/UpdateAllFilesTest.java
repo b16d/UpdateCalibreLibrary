@@ -11,9 +11,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.lang.reflect.Field;
+
 
 public class UpdateAllFilesTest {
-/*
+
     @Mock
     BackupDirectory backupDirectory;
 
@@ -24,17 +26,25 @@ public class UpdateAllFilesTest {
     DatabaseUpdater databaseUpdater;
 
     @Test
-    public void testUpdateWithoutBackup() {
+    public void testUpdateWithoutBackup() throws IllegalAccessException, NoSuchFieldException {
         UpdateAllFiles updateAllFiles = new UpdateAllFiles("", false);
-        updateAllFiles.setZipFolder(backupDirectory);
+        Field field = UpdateAllFiles.class.getDeclaredField("zipFolder");
+        field.setAccessible(true);
+        field.set(updateAllFiles,backupDirectory);
+
         updateAllFiles.update();
         Mockito.verify(backupDirectory,Mockito.never()).backupDirectory();
     }
 
     @Test
-    public void testUpdateWithBackup() {
+    public void testUpdateWithBackup() throws IllegalAccessException, NoSuchFieldException {
         UpdateAllFiles updateAllFiles = new UpdateAllFiles("", true);
-        updateAllFiles.setZipFolder(backupDirectory);
+
+        Field field = UpdateAllFiles.class.getDeclaredField("zipFolder");
+        field.setAccessible(true);
+        field.set(updateAllFiles,backupDirectory);
+
+
         updateAllFiles.update();
         Mockito.verify(backupDirectory,Mockito.times(1)).backupDirectory();
     }
@@ -42,5 +52,5 @@ public class UpdateAllFilesTest {
    @BeforeEach
     public void setUp() {
        MockitoAnnotations.initMocks(this);
-   }*/
+   }
 }

@@ -1,0 +1,309 @@
+package com.acl.updater.database;
+
+
+import com.acl.updater.database.datamode.Comments;
+import com.acl.updater.utils.Utils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+
+import java.lang.reflect.Field;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.Mockito.when;
+
+public class MetadataDatabaseUpdaterTest  {
+
+    @Mock
+    private Connection connection;
+
+    private MetadataDatabaseUpdater metadataDatabaseUpdater;
+
+    @BeforeEach
+    public void init() throws IllegalAccessException, NoSuchFieldException, SQLException {
+        MockitoAnnotations.initMocks(this);
+        metadataDatabaseUpdater = new MetadataDatabaseUpdater("");
+
+        Field field = MetadataDatabaseUpdater.class.getDeclaredField("connection");
+        field.setAccessible(true);
+        field.set(metadataDatabaseUpdater, connection);
+
+        when(connection.createStatement()).thenReturn(new Statement() {
+            @Override
+            public ResultSet executeQuery(String sql) throws SQLException {
+                return null;
+            }
+
+            @Override
+            public int executeUpdate(String sql) throws SQLException {
+                return 0;
+            }
+
+            @Override
+            public void close() throws SQLException {
+
+            }
+
+            @Override
+            public int getMaxFieldSize() throws SQLException {
+                return 0;
+            }
+
+            @Override
+            public void setMaxFieldSize(int max) throws SQLException {
+
+            }
+
+            @Override
+            public int getMaxRows() throws SQLException {
+                return 0;
+            }
+
+            @Override
+            public void setMaxRows(int max) throws SQLException {
+
+            }
+
+            @Override
+            public void setEscapeProcessing(boolean enable) throws SQLException {
+
+            }
+
+            @Override
+            public int getQueryTimeout() throws SQLException {
+                return 0;
+            }
+
+            @Override
+            public void setQueryTimeout(int seconds) throws SQLException {
+
+            }
+
+            @Override
+            public void cancel() throws SQLException {
+
+            }
+
+            @Override
+            public SQLWarning getWarnings() throws SQLException {
+                return null;
+            }
+
+            @Override
+            public void clearWarnings() throws SQLException {
+
+            }
+
+            @Override
+            public void setCursorName(String name) throws SQLException {
+
+            }
+
+            @Override
+            public boolean execute(String sql) throws SQLException {
+                return false;
+            }
+
+            @Override
+            public ResultSet getResultSet() throws SQLException {
+                return null;
+            }
+
+            @Override
+            public int getUpdateCount() throws SQLException {
+                return 0;
+            }
+
+            @Override
+            public boolean getMoreResults() throws SQLException {
+                return false;
+            }
+
+            @Override
+            public void setFetchDirection(int direction) throws SQLException {
+
+            }
+
+            @Override
+            public int getFetchDirection() throws SQLException {
+                return 0;
+            }
+
+            @Override
+            public void setFetchSize(int rows) throws SQLException {
+
+            }
+
+            @Override
+            public int getFetchSize() throws SQLException {
+                return 0;
+            }
+
+            @Override
+            public int getResultSetConcurrency() throws SQLException {
+                return 0;
+            }
+
+            @Override
+            public int getResultSetType() throws SQLException {
+                return 0;
+            }
+
+            @Override
+            public void addBatch(String sql) throws SQLException {
+
+            }
+
+            @Override
+            public void clearBatch() throws SQLException {
+
+            }
+
+            @Override
+            public int[] executeBatch() throws SQLException {
+                return new int[0];
+            }
+
+            @Override
+            public Connection getConnection() throws SQLException {
+                return null;
+            }
+
+            @Override
+            public boolean getMoreResults(int current) throws SQLException {
+                return false;
+            }
+
+            @Override
+            public ResultSet getGeneratedKeys() throws SQLException {
+                return null;
+            }
+
+            @Override
+            public int executeUpdate(String sql, int autoGeneratedKeys) throws SQLException {
+                return 0;
+            }
+
+            @Override
+            public int executeUpdate(String sql, int[] columnIndexes) throws SQLException {
+                return 0;
+            }
+
+            @Override
+            public int executeUpdate(String sql, String[] columnNames) throws SQLException {
+                return 0;
+            }
+
+            @Override
+            public boolean execute(String sql, int autoGeneratedKeys) throws SQLException {
+                return false;
+            }
+
+            @Override
+            public boolean execute(String sql, int[] columnIndexes) throws SQLException {
+                return false;
+            }
+
+            @Override
+            public boolean execute(String sql, String[] columnNames) throws SQLException {
+                return false;
+            }
+
+            @Override
+            public int getResultSetHoldability() throws SQLException {
+                return 0;
+            }
+
+            @Override
+            public boolean isClosed() throws SQLException {
+                return false;
+            }
+
+            @Override
+            public void setPoolable(boolean poolable) throws SQLException {
+
+            }
+
+            @Override
+            public boolean isPoolable() throws SQLException {
+                return false;
+            }
+
+            @Override
+            public void closeOnCompletion() throws SQLException {
+
+            }
+
+            @Override
+            public boolean isCloseOnCompletion() throws SQLException {
+                return false;
+            }
+
+            @Override
+            public <T> T unwrap(Class<T> iface) throws SQLException {
+                return null;
+            }
+
+            @Override
+            public boolean isWrapperFor(Class<?> iface) throws SQLException {
+                return false;
+            }
+        });
+    }
+
+    @Test
+    public void updateCommentsTestOneElement() throws SQLException{
+
+        List<Comments> commentsList = new ArrayList<>();
+        commentsList.add(new Comments(1, 1, "1"));
+
+        metadataDatabaseUpdater.updateComments(commentsList);
+        Mockito.verify(connection,Mockito.times(1)).commit();
+    }
+
+    @Test
+    public void updateCommentsTestTenElement() throws SQLException{
+
+        List<Comments> commentsList = new ArrayList<>();
+        commentsList.add(new Comments(1, 1, "1"));
+        commentsList.add(new Comments(2, 2, "2"));
+        commentsList.add(new Comments(3, 3, "3"));
+        commentsList.add(new Comments(4, 4, "4"));
+        commentsList.add(new Comments(5, 5, "5"));
+        commentsList.add(new Comments(6, 6, "6"));
+        commentsList.add(new Comments(7, 7, "7"));
+        commentsList.add(new Comments(8, 8, "8"));
+        commentsList.add(new Comments(9, 9, "9"));
+        commentsList.add(new Comments(10, 10, "10"));
+
+        metadataDatabaseUpdater.updateComments(commentsList);
+        Mockito.verify(connection,Mockito.times(1)).commit();
+    }
+
+    @Test
+    public void updateCommentsTestElevneElement() throws SQLException{
+
+        List<Comments> commentsList = new ArrayList<>();
+        commentsList.add(new Comments(1, 1, "1"));
+        commentsList.add(new Comments(2, 2, "2"));
+        commentsList.add(new Comments(3, 3, "3"));
+        commentsList.add(new Comments(4, 4, "4"));
+        commentsList.add(new Comments(5, 5, "5"));
+        commentsList.add(new Comments(6, 6, "6"));
+        commentsList.add(new Comments(7, 7, "7"));
+        commentsList.add(new Comments(8, 8, "8"));
+        commentsList.add(new Comments(9, 9, "9"));
+        commentsList.add(new Comments(10, 10, "10"));
+        commentsList.add(new Comments(11, 11, "11"));
+        commentsList.add(new Comments(12, 12, "12"));
+
+        metadataDatabaseUpdater.updateComments(commentsList);
+        Mockito.verify(connection,Mockito.times(2)).commit();
+    }
+}

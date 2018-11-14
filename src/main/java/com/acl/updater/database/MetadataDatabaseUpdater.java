@@ -111,10 +111,13 @@ public class MetadataDatabaseUpdater implements DatabaseUpdater {
      * Update comments table with a list a comment who must be updated
      * @param commentsList list a comments ta update
      */
-    private void updateComments (final List<Comments> commentsList) {
+    public void updateComments (final List<Comments> commentsList) {
         try {
             LOGGER.info("Number of elements that will be updated: {}", commentsList.size());
             Statement stmt = connection.createStatement();
+
+            int counter = 0;
+            String updaeRequests = "";
 
             for(Comments comments : commentsList) {
 
@@ -122,9 +125,24 @@ public class MetadataDatabaseUpdater implements DatabaseUpdater {
                 String sql = UPDATE_COMMENTS_SET + TEXT + "=\'" + text + "\'"+
                         WHERE + ID + "=" + comments.getId();
 
+                counter++;
                 LOGGER.info("Going to play SQL request: {}", sql);
-                stmt.executeUpdate(sql);
+
+                if (counter < 10) {
+                    updaeRequests = "; \n" + sql;
+
+                } else if (counter == 10) {
+                    stmt.executeUpdate(updaeRequests);
+                    connection.commit();
+                    updaeRequests = "";
+                    counter= 0;
+                }
+            }
+
+            if (counter != 10 &&  counter != 0) {
+                stmt.executeUpdate(updaeRequests);
                 connection.commit();
+                updaeRequests = "";
             }
             stmt.close();
         } catch (Exception e) {
